@@ -6,7 +6,6 @@ django-environ==0.4.5
 gunicorn==19.9.0
 idna==2.8
 isort==4.3.4
-pkg-resources==0.0.0
 pytz==2018.9
 requests==2.21.0
 sqlparse==0.3.0
