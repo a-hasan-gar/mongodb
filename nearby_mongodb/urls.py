@@ -15,15 +15,13 @@ Including another URLconf
 """
 
 
-from django.conf.urls import include, url
 from django.contrib import admin
-
-from django.conf.urls.static import static
-from django.conf import settings
+from django.urls import path
+from django.urls import include
 
 import search_nearby.urls as search_nearby
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^search/', include(search_nearby)),
+    path('search/', include('search_nearby.urls')),
+    path('admin/', admin.site.urls),
 ]
