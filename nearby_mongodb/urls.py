@@ -22,6 +22,6 @@ from django.urls import include
 import search_nearby.urls as search_nearby
 
 urlpatterns = [
-    path('search/', include('search_nearby.urls')),
+    path('', include('search_nearby.urls')),
     path('admin/', admin.site.urls),
 ]

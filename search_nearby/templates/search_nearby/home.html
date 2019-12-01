@@ -1,1 +1,137 @@
-<h1>home</h1>
+{% load staticfiles %}
+{% load static %}
+
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Nearby</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS here -->
+    
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'img/banner.png' %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+    <!-- header-start -->
+    <header>
+        <div class="header-area ">
+
+            
+        </div>
+    </header>
+    <!-- header-end -->
+
+    <!-- slider_area_start -->
+    <div class="container-fluid slider">
+                <div class="row">
+                    <div class="col-3">
+
+                    </div>
+                    <div class="col-6 text-center align-self-center" >
+                        <h2 style="color:white;">Find Popular Location</h2>
+                    </div>
+                    <div class="col-3">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="div-4">
+
+                    </div>
+                    <div class="div-4">
+                        <!-- nanti disini form -->
+                    </div>
+                    <div class="div-4">
+
+                    </div>
+                </div>
+    </div>
+    <!-- slider_area_end -->
+
+    <!-- popular_Location  -->
+    <div class="container-fluid popular_location">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section_title mb-40 text-center">
+                        <h3>Popular Locations</h3>
+                    </div>
+                </div>
+            </div>
+            <br>
+            {% for i in '01234'|make_list  %}
+            
+                <div class="row">
+                    <div class="card-loc">
+                        <h3 class="card-title">Location Title</h3>
+                        
+                        <h4 class="card-visitor">Visitors : </h4>
+                        <h4 class="card-desc">ini adalah tempat abcd</h4>
+                    </div>
+                </div>				
+            {% endfor %}
+    </div>
+    <!-- team_area  -->
+    <div class="team_area">
+           
+    </div>
+    <!-- /team_area  -->
+
+ 
+
+    <!-- footer start -->
+    <footer class="footer">
+        <div class="copy-right_text">
+            <div class="container">
+                <div class="footer_border"></div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <br>
+                        <p class="copy_right text-center">
+                            All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by Kelompok 1
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--/ footer end  -->
+
+    <!-- link that opens popup -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"> </script>
+ 
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+
+   
+    <script>
+       
+       
+    </script>
+</body>
+
+</html>
