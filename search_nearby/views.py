@@ -15,18 +15,23 @@ collection_accident = settings.DB.accident
 collection_accident.create_index([("Location", GEO2D)])
 
 def nearby_accidents(request):
-    lat = request.GET.get('lat', None)
     lon = request.GET.get('lon', None)
+    lat = request.GET.get('lat', None)
 
     if request.method != 'GET' or not lat or not lon:
         return JsonResponse({})
 
-    radius = request.GET.get('radius', 500)
-    limit = request.GET.get('limit', 0)
+    try:
+        lon = float(lon)
+        lat = float(lat)
+        radius = request.GET.get('radius', 500)
+        limit = request.GET.get('limit', 0)
+
+        filter_type = int(request.GET.get('filter_type', FilterType.LIGHT_CONDITIONS))
+    except:
+        return JsonResponse({})
 
     accidents = get_nearby_accidents(lat, lon, radius, limit)
-
-    filter_type = request.GET.get('filter_type', FilterType.LIGHT_CONDITIONS)
     frequencies = transform_to_filter(accidents, filter_type)
 
     return JsonResponse({frequencies})
@@ -61,7 +66,7 @@ def transform_to_filter(accidents, filter_type):
     return frequencies
 
 # Query
-def get_nearby_accident(lon, lat, radius=500, lim=0):
+def get_nearby_accidents(lon, lat, radius=500, lim=0):
     query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius/6378100]}}}
     accident = collection_accident.find(query).limit(lim)
     return accident.toArray()
