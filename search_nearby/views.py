@@ -69,6 +69,7 @@ def transform_to_filter(accidents, filter_type):
 
 # Query
 def get_nearby_accidents(lon, lat, radius=500, lim=0):
+    lim = min(lim, MAX_BATCH_SIZE)
     query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius / EARTH_RADIUS]}}}
-    accident = collection_accident.find(query).limit(lim)
+    accident = collection_accident.find(query, batch_size=lim).limit(lim)
     return list(accident)
