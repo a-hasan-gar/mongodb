@@ -19,7 +19,6 @@ def index(request):
 collection_accident = settings.DB.accident
 
 EARTH_RADIUS = 6378100 # in meter
-MAX_BATCH_SIZE = 100000
 
 def nearby_accidents(request):
     if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
@@ -74,7 +73,6 @@ def transform_to_filter(accidents, filter_type):
 
 # Query
 def get_nearby_accidents(lon, lat, radius=500, lim=0):
-    lim = min(lim, MAX_BATCH_SIZE)
     query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius / EARTH_RADIUS]}}}
     accident = collection_accident.find(query, batch_size=lim).limit(lim)
     return list(accident)

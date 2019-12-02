@@ -84,7 +84,8 @@ DATABASE_USER = ''
 DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
 DATABASE_PORT = ''
-CLIENT = MongoClient('178.128.83.173', 27017)
+
+CLIENT = MongoClient('mongodb://167.71.204.99,178.128.83.173')
 DB = CLIENT.traffic
 
 
