@@ -33,7 +33,7 @@ services:
     image: mongo
     depends_on:
       - mongocfg2
-    command: mongos --configdb mongors1conf/178.128.83.173:27032 --port 27017 --bind_ip 0.0.0.0
+    command: mongos --configdb mongors1conf/10.130.43.191:27032 --port 27017 --bind_ip 0.0.0.0
     ports:
       - 27017:27017
     expose:
@@ -41,7 +41,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
-  django:
+  django2:
+    container_name: django2
     build: ..
     ports:
       - 80:8000
