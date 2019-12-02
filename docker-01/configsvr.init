@@ -1,0 +1,9 @@
+rs.initiate({
+    _id: "mongors1conf",
+    configsvr: true,
+    protocolVersion: 1,
+    members: [
+        {_id: 0, host: "10.130.85.56:27031"},
+        {_id: 1, host: "10.130.43.191:27032" }
+    ]
+})
