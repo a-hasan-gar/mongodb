@@ -40,3 +40,10 @@ services:
       - "27017"
     volumes:
       - /etc/localtime:/etc/localtime:ro
+
+  django:
+    build: ..
+    ports:
+      - 80:8000
+    expose:
+      - "8000"
