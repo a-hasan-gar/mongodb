@@ -95,3 +95,27 @@ box-shadow: 5px 5px 30px 1px rgba(0,0,0,0.10), -5px -5px 30px 1px rgba(0,0,0,0.1
 .card-desc{
   padding-top: 20px;
 }
+select, input{
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+label{
+  color: #f1f1f1;
+  font-weight: 500;
+  margin: 5px;
+  font-size: 16px;
+}
+#btn-find{
+  padding: 5px 30px;
+  background-color: gold;
+  color: white;
+  border-color: gold;
+  
+  font-size: 16px;
+}
+input#id_limit, input#id_radius{
+  width: 10%;
+  
+
+}
