@@ -1,5 +1,5 @@
 import pprint
-from enum import Enum
+from enum import IntEnum
 
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -12,31 +12,31 @@ def index(request):
 
 # Connect with mongoDB
 collection_accident = settings.DB.accident
-collection_accident.create_index([("Location", GEO2D)])
+
+EARTH_RADIUS = 6378100 # in meter
+MAX_BATCH_SIZE = 100000
 
 def nearby_accidents(request):
-    lon = request.GET.get('lon', None)
-    lat = request.GET.get('lat', None)
-
-    if request.method != 'GET' or not lat or not lon:
+    if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
         return JsonResponse({})
 
     try:
-        lon = float(lon)
-        lat = float(lat)
-        radius = request.GET.get('radius', 500)
-        limit = request.GET.get('limit', 0)
-
+        lon = float(request.GET['lon'])
+        lat = float(request.GET['lat'])
+        radius = float(request.GET.get('radius', 500))
+        limit = int(request.GET.get('limit', 0))
         filter_type = int(request.GET.get('filter_type', FilterType.LIGHT_CONDITIONS))
+
     except:
         return JsonResponse({})
 
-    accidents = get_nearby_accidents(lat, lon, radius, limit)
+
+    accidents = get_nearby_accidents(lon, lat, radius, limit)
     frequencies = transform_to_filter(accidents, filter_type)
 
-    return JsonResponse({frequencies})
+    return JsonResponse(frequencies)
 
-class FilterType(Enum):
+class FilterType(IntEnum):
     LIGHT_CONDITIONS = 0,
     ROAD_SURFACE_CONDITIONS = 1,
     ROAD_TYPE = 2,
@@ -57,6 +57,8 @@ def transform_to_filter(accidents, filter_type):
             val = accident['Weather_Conditions']
         elif filter_type == FilterType.YEAR:
             val = accident['Year']
+        else:
+            continue
 
         if val not in frequencies:
             frequencies[val] = 1
@@ -67,6 +69,6 @@ def transform_to_filter(accidents, filter_type):
 
 # Query
 def get_nearby_accidents(lon, lat, radius=500, lim=0):
-    query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius/6378100]}}}
+    query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius / EARTH_RADIUS]}}}
     accident = collection_accident.find(query).limit(lim)
-    return accident.toArray()
+    return list(accident)
