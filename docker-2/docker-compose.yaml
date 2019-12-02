@@ -3,7 +3,7 @@ services:
   mongors1n2:
     container_name: mongors1n2
     image: mongo
-    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017 --bind_ip 0.0.0.0
     ports:
       - 27022:27017
     expose:
@@ -17,7 +17,7 @@ services:
   mongocfg2:
     container_name: mongocfg2
     image: mongo
-    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017 --bind_ip 0.0.0.0
     ports:
       - 27032:27017
     environment:
@@ -33,9 +33,9 @@ services:
     image: mongo
     depends_on:
       - mongocfg2
-    command: mongos --configdb mongors1conf/mongocfg2:27017 --port 27017
+    command: mongos --configdb mongors1conf/178.128.83.173:27032 --port 27017 --bind_ip 0.0.0.0
     ports:
-      - 27042:27017
+      - 27017:27017
     expose:
       - "27017"
     volumes:
