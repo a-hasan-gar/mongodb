@@ -45,7 +45,7 @@
 
                     </div>
                     <div class="col-6 text-center align-self-center" >
-                        <h2 style="color:white; font-size: 24px;">Find Nearby Accidents</h2>
+                        <h2 style="color:white; font-size: 24px;">Find Accidents History</h2>
                     </div>
                     <div class="col-3">
 
@@ -53,7 +53,8 @@
                 </div>
                 <br>
                  <!-- nanti disini form -->
-                <form method="GET" action='/accidents/nearby?'>    
+                <form method="POST" action='/'>  
+                    {% csrf_token %}  
                     <div class="row mx-auto" style="margin:10px;">
                         <div class="div-4">
 
@@ -86,12 +87,12 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section_title mb-40 text-center">
-                        <h3>Nearby Accidents</h3>
+                        <h3>Accidents History</h3>
                     </div>
                 </div>
             </div>
             <br>
-            {% for i in '01234'|make_list  %}
+            {% for i in json_res  %}
             
                 <div class="row">
                     <div class="card-loc">
@@ -141,7 +142,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
  
-
+    <script>
+    </script>
    
     
 </body>
