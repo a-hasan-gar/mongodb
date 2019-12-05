@@ -10,6 +10,8 @@ from django.conf import settings
 from pymongo import MongoClient, GEO2D, GEOSPHERE
 
 def index(request):
+    json_res = {}
+    opsi = opsi_filter()
     if request.method == 'POST':
        # res = opsi_filter(request.POST)
         #print(request.POST )
@@ -22,13 +24,12 @@ def index(request):
         print(cities_opt)
         # lon = request.POST['lon']
         # lat = request.POST.get('lat', False)
-        url = '/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         print(url)
         req = requests.get(url)
         json_res = req.json()
         print(json_res)
-    json_res = {}
-    opsi = opsi_filter()
+
     return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
 
 

@@ -92,13 +92,13 @@
                 </div>
             </div>
             <br>
-            {% for i in json_res  %}
+            {% for key, value in json_res.items  %}
             
                 <div class="row">
                     <div class="card-loc">
-                        <h3 class="card-title">Location Title</h3>
+                        <h3 class="card-title">{{key}}</h3>
                         
-                        <h4 class="card-visitor">Visitors : </h4>
+                        <h4 class="card-visitor">Accidents Total : {{ value }}</h4>
                         <h4 class="card-desc">ini adalah tempat abcd</h4>
                     </div>
                 </div>				
