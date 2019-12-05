@@ -13,13 +13,20 @@ def index(request):
     if request.method == 'POST':
        # res = opsi_filter(request.POST)
         #print(request.POST )
-        lon = request.POST['lon']
-        lan = request.POST.get('lan', False)
+    
         radius = request.POST['radius']
         limit = request.POST['limit']
         filter_type = request.POST['filter_type']
-        #req = requests.get('/accidents/nearby?')
-        #json_res = req.json()
+        cities_opt = request.POST.get('cities', False)
+        print("ini cities_opt")
+        print(cities_opt)
+        # lon = request.POST['lon']
+        # lat = request.POST.get('lat', False)
+        url = '/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        print(url)
+        req = requests.get(url)
+        json_res = req.json()
+        print(json_res)
     json_res = {}
     opsi = opsi_filter()
     return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
