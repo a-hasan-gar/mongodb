@@ -3,16 +3,34 @@ from enum import IntEnum
 
 from django.http import JsonResponse
 from django.shortcuts import render
-
+import requests
 from .form import *
 
 from django.conf import settings
 from pymongo import MongoClient, GEO2D, GEOSPHERE
 
 def index(request):
-
+    json_res = {}
     opsi = opsi_filter()
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi})
+    if request.method == 'POST':
+       # res = opsi_filter(request.POST)
+        #print(request.POST )
+    
+        radius = request.POST['radius']
+        limit = request.POST['limit']
+        filter_type = request.POST['filter_type']
+        cities_opt = request.POST.get('cities', False)
+        print("ini cities_opt")
+        print(cities_opt)
+        # lon = request.POST['lon']
+        # lat = request.POST.get('lat', False)
+        url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        print(url)
+        req = requests.get(url)
+        json_res = req.json()
+        print(json_res)
+
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
 
 
 # Connect with mongoDB

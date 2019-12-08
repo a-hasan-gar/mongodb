@@ -95,8 +95,7 @@ box-shadow: 5px 5px 30px 1px rgba(0,0,0,0.10), -5px -5px 30px 1px rgba(0,0,0,0.1
 .card-desc{
   padding-top: 20px;
 }
-select, input{
-  padding: 5px;
+div select, div input{
   border-radius: 5px;
   font-size: 14px;
 }
