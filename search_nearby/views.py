@@ -1,4 +1,5 @@
 import pprint
+import googlemaps
 from enum import IntEnum
 
 from django.http import JsonResponse
@@ -9,16 +10,37 @@ from .form import *
 from django.conf import settings
 from pymongo import MongoClient, GEO2D, GEOSPHERE
 
-def index(request):
+gmaps = googlemaps.Client(key="AIzaSyCRmg-YeF4L81AF0gAenxovhsepQl2-K1U")
 
+
+def index(request):
+    plc=True
     opsi = opsi_filter()
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi})
+    places = place()
+    
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'places':places,'plc':plc})
 
 
 # Connect with mongoDB
 collection_accident = settings.DB.accident
 
 EARTH_RADIUS = 6378100 # in meter
+
+def page_coordinate(request):
+    plc =False
+    places = place()
+    opsi = opsi_filter()
+    lat_long = get_location(str(request.GET['place']))
+    lat= lat_long['lat']
+    longs=lat_long['lng']
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'plc':plc,'lat':lat,'longs':longs,'places':places})
+
+
+def get_location(name):
+    geocode_result = gmaps.geocode(name)
+    lat_long= geocode_result[0]['geometry']['location']
+    return lat_long
+
 
 def nearby_accidents(request):
     if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
@@ -76,3 +98,5 @@ def get_nearby_accidents(lon, lat, radius=500, lim=0):
     query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius / EARTH_RADIUS]}}}
     accident = collection_accident.find(query, batch_size=lim).limit(lim)
     return list(accident)
+
+

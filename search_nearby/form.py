@@ -12,6 +12,9 @@ cities_opt = [
     
 ]
 
+class place(forms.Form):
+    place=forms.CharField()
+
 class opsi_filter(forms.Form):
     lon=forms.CharField()
     lat =forms.CharField()
