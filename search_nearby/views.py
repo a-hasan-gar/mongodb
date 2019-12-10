@@ -13,8 +13,8 @@ def index(request):
     json_res = {}
     opsi = opsi_filter()
     if request.method == 'POST':
-       # res = opsi_filter(request.POST)
-        #print(request.POST )
+        # res = opsi_filter(request.POST)
+        # print(request.POST )
     
         radius = request.POST['radius']
         limit = request.POST['limit']
@@ -26,10 +26,15 @@ def index(request):
         # lat = request.POST.get('lat', False)
         url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         print(url)
+        url2 = 'http://167.71.204.99/accidents/nearbycoord?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        print(url2)
         req = requests.get(url)
+        req2 = requests.get(url2)
         json_res = req.json()
-        print(json_res)
+        json_res2 = req2.json()
 
+        print(json_res)
+        print(json_res2)
     return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
 
 
@@ -39,6 +44,8 @@ collection_accident = settings.DB.accident
 EARTH_RADIUS = 6378100 # in meter
 
 def nearby_accidents(request):
+    # data = {}
+    
     if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
         return JsonResponse({})
 
@@ -47,7 +54,7 @@ def nearby_accidents(request):
         lat = float(request.GET['lat'])
         radius = float(request.GET.get('radius', 500))
         limit = int(request.GET.get('limit', 0))
-        filter_type = int(request.GET.get('filter_type', FilterType.LIGHT_CONDITIONS))
+        filter_type = int(request.GET.get('filter_t ype', FilterType.LIGHT_CONDITIONS))
 
     except:
         return JsonResponse({})
@@ -55,8 +62,33 @@ def nearby_accidents(request):
 
     accidents = get_nearby_accidents(lon, lat, radius, limit)
     frequencies = transform_to_filter(accidents, filter_type)
+    coordinates = get_coord(accidents)
 
+    # data["frequencies"] = frequencies
+    # data["coordinates"] = coordinates
     return JsonResponse(frequencies)
+
+def nearby_accidentscoord(request):
+    if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
+        return JsonResponse({})
+
+    try:
+        lon = float(request.GET['lon'])
+        lat = float(request.GET['lat'])
+        radius = float(request.GET.get('radius', 500))
+        limit = int(request.GET.get('limit', 0))
+        filter_type = int(request.GET.get('filter_t ype', FilterType.LIGHT_CONDITIONS))
+
+    except:
+        return JsonResponse({})
+
+
+    accidents = get_nearby_accidents(lon, lat, radius, limit)
+    coordinates = get_coord(accidents)
+
+    # data["frequencies"] = frequencies
+    # data["coordinates"] = coordinates
+    return JsonResponse(coordinates)
 
 class FilterType(IntEnum):
     LIGHT_CONDITIONS = 0,
@@ -94,3 +126,10 @@ def get_nearby_accidents(lon, lat, radius=500, lim=0):
     query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius / EARTH_RADIUS]}}}
     accident = collection_accident.find(query, batch_size=lim).limit(lim)
     return list(accident)
+
+def get_coord(accidents):
+    coordinates = []
+    for accident in accidents:
+        coordinates.append([accident['Latitude'], accident['Longitude']])
+    
+    return coordinates
