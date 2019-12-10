@@ -1,5 +1,4 @@
 import pprint
-import googlemaps
 from enum import IntEnum
 
 from django.http import JsonResponse
@@ -9,40 +8,12 @@ from .form import *
 
 from django.conf import settings
 from pymongo import MongoClient, GEO2D, GEOSPHERE
-
-# def index(request):
-#     json_res = {}
-#     opsi = opsi_filter()
-#     if request.method == 'POST':
-#         # res = opsi_filter(request.POST)
-#         # print(request.POST )
-    
-#         radius = request.POST['radius']
-#         limit = request.POST['limit']
-#         filter_type = request.POST['filter_type']
-#         cities_opt = request.POST.get('cities', False)
-#         print("ini cities_opt")
-#         print(cities_opt)
-#         # lon = request.POST['lon']
-#         # lat = request.POST.get('lat', False)
-#         url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
-#         print(url)
-#         url2 = 'http://167.71.204.99/accidents/nearbycoord?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
-#         print(url2)
-#         req = requests.get(url)
-#         req2 = requests.get(url2)
-#         json_res = req.json()
-#         json_res2 = req2.json()
-
-#         print(json_res)
-#         print(json_res2)
-#     return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
-gmaps = googlemaps.Client(key="AIzaSyCRmg-YeF4L81AF0gAenxovhsepQl2-K1U")
-
+import json
 
 def index(request):
-    plc=True
+    json_res = {}
     opsi = opsi_filter()
+    coordinates = []
     if request.method == 'POST':
        # res = opsi_filter(request.POST)
         print("ini request.POST")
@@ -56,44 +27,32 @@ def index(request):
         lon = lonlan.split(", ")[1]
         lat = lonlan.split(", ")[0]
         #tp bingung gmn masukin value pinnya ke post
-        print("ini cities_opt")
-        print(cities_opt)
+        
         # lon = request.POST['lon']
         # lat = request.POST.get('lat', False)
         #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         print(url)
+        # url2 = 'http://localhost:8000/accidents/nearbycoord?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         req = requests.get(url)
+        # req2 = requests.get(url2)
         json_res = req.json()
+        # print(req2)
         print(json_res)
+        coordinates = nearby_accidentscoord(float(lon), float(lat), int(radius), int(limit))
+        print(coordinates)
 
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
+        json_list = json.dumps(coordinates)
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res, 'coordinates' : json_list})
 
 
 # Connect with mongoDB
 collection_accident = settings.DB.accident
 
 EARTH_RADIUS = 6378100 # in meter
-
-def page_coordinate(request):
-    plc =False
-    places = place()
-    opsi = opsi_filter()
-    lat_long = get_location(str(request.GET['place']))
-    lat= lat_long['lat']
-    longs=lat_long['lng']
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'plc':plc,'lat':lat,'longs':longs,'places':places})
-
-
-def get_location(name):
-    geocode_result = gmaps.geocode(name)
-    lat_long= geocode_result[0]['geometry']['location']
-    return lat_long
-
+MAX_BATCH_SIZE = 100000
 
 def nearby_accidents(request):
-    # data = {}
-    
     if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
         return JsonResponse({})
 
@@ -102,7 +61,7 @@ def nearby_accidents(request):
         lat = float(request.GET['lat'])
         radius = float(request.GET.get('radius', 500))
         limit = int(request.GET.get('limit', 0))
-        filter_type = int(request.GET.get('filter_t ype', FilterType.LIGHT_CONDITIONS))
+        filter_type = int(request.GET.get('filter_type', FilterType.LIGHT_CONDITIONS))
 
     except:
         return JsonResponse({})
@@ -110,33 +69,15 @@ def nearby_accidents(request):
 
     accidents = get_nearby_accidents(lon, lat, radius, limit)
     frequencies = transform_to_filter(accidents, filter_type)
-    coordinates = get_coord(accidents)
 
-    # data["frequencies"] = frequencies
-    # data["coordinates"] = coordinates
     return JsonResponse(frequencies)
 
-def nearby_accidentscoord(request):
-    if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
-        return JsonResponse({})
-
-    try:
-        lon = float(request.GET['lon'])
-        lat = float(request.GET['lat'])
-        radius = float(request.GET.get('radius', 500))
-        limit = int(request.GET.get('limit', 0))
-        filter_type = int(request.GET.get('filter_t ype', FilterType.LIGHT_CONDITIONS))
-
-    except:
-        return JsonResponse({})
-
+def nearby_accidentscoord(lon, lat, radius, limit):
 
     accidents = get_nearby_accidents(lon, lat, radius, limit)
-    coordinates = get_coord(accidents)
+    coordinates =get_coord(accidents)
 
-    # data["frequencies"] = frequencies
-    # data["coordinates"] = coordinates
-    return JsonResponse(coordinates)
+    return coordinates
 
 class FilterType(IntEnum):
     LIGHT_CONDITIONS = 0,
@@ -171,14 +112,18 @@ def transform_to_filter(accidents, filter_type):
 
 # Query
 def get_nearby_accidents(lon, lat, radius=500, lim=0):
+    lim = min(lim, MAX_BATCH_SIZE)
     query = {"Location": {"$geoWithin": {"$centerSphere": [[lon, lat], radius / EARTH_RADIUS]}}}
     accident = collection_accident.find(query, batch_size=lim).limit(lim)
     return list(accident)
 
 def get_coord(accidents):
     coordinates = []
+    print("ini get_coord")
     for accident in accidents:
-        coordinates.append([accident['Latitude'], accident['Longitude']])
+        
+        coordinates.append([accident['Location']['coordinates'][0], accident['Location']['coordinates'][1]])
     
+    print(coordinates)
     return coordinates
 
