@@ -21,9 +21,9 @@ def index(request):
         limit = request.POST['limit']
         filter_type = request.POST['filter_type']
         # cities_opt = request.POST.get('cities', False)
-        lonlan = request.POST.get('lon_lat', False)
-        lon = lonlan.split(", ")[0]
-        lat = lonlan.split(", ")[1]
+        lonlan = request.POST.get('lat_lon', False)
+        lon = lonlan.split(", ")[1]
+        lat = lonlan.split(", ")[0]
         #tp bingung gmn masukin value pinnya ke post
         print("ini cities_opt")
         print(cities_opt)

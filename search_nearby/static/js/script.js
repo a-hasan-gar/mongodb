@@ -1,7 +1,7 @@
 //the maps api is setup above
 window.onload = function() {
 
-    var latlng = new google.maps.LatLng(-0.1278, 51.5074); //Set the default location of map
+    var latlng = new google.maps.LatLng(51.5074, -0.1278); //Set the default location of map
 
     var map = new google.maps.Map(document.getElementById('map'), {
 
