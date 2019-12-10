@@ -36,6 +36,7 @@
   -o-transition: 0.3s;
   transition: 0.3s;
 }
+
 a:focus {
     text-decoration: none;
 }
@@ -122,4 +123,32 @@ input#id_limit, input#id_radius{
   height: 200px;
   width: 40%;
   border: 1px solid #000;
+}
+form.example input[type=text] {
+
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  font-size: 14px;
+  border: 1px solid grey;
+  width: 40%;
+  padding: 5px 30px;
+  border-color: gold;
+}
+#button-search {
+  float: left;
+  width: 5%; 
+  border-radius: 0px 5px 5px 0px;
+  font-size: 14px;
+  border-left: none;
+  cursor: pointer;
+  background-color: gold;
+  color: white;
+  border-color: gold;
+  padding: 5px 30px;
+  
+  
+}
+
+form.example #button-search:hover {
+  background: orange;
 }
