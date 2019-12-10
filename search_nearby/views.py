@@ -14,10 +14,10 @@ def index(request):
     json_res = {}
     opsi = opsi_filter()
     coordinates = []
+    json_list = json.dumps([])
+    json_res_dump = json.dumps({})
     if request.method == 'POST':
        # res = opsi_filter(request.POST)
-        print("ini request.POST")
-        print(request.POST )
     
         radius = request.POST['radius']
         limit = request.POST['limit']
@@ -32,18 +32,14 @@ def index(request):
         # lat = request.POST.get('lat', False)
         #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
-        print(url)
-        # url2 = 'http://localhost:8000/accidents/nearbycoord?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        
         req = requests.get(url)
-        # req2 = requests.get(url2)
         json_res = req.json()
-        # print(req2)
-        print(json_res)
-        coordinates = nearby_accidentscoord(float(lon), float(lat), int(radius), int(limit))
-        print(coordinates)
-
+        coordinates = nearby_accidents_coord(float(lon), float(lat), int(radius), int(limit))
+        
         json_list = json.dumps(coordinates)
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res, 'coordinates' : json_list})
+        json_res_dump = json.dumps(json_res)
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res, 'coordinates' : json_list, 'json_res_dump' : json_res_dump})
 
 
 # Connect with mongoDB
@@ -72,7 +68,7 @@ def nearby_accidents(request):
 
     return JsonResponse(frequencies)
 
-def nearby_accidentscoord(lon, lat, radius, limit):
+def nearby_accidents_coord(lon, lat, radius, limit):
 
     accidents = get_nearby_accidents(lon, lat, radius, limit)
     coordinates =get_coord(accidents)
@@ -119,11 +115,9 @@ def get_nearby_accidents(lon, lat, radius=500, lim=0):
 
 def get_coord(accidents):
     coordinates = []
-    print("ini get_coord")
     for accident in accidents:
         
         coordinates.append([accident['Location']['coordinates'][0], accident['Location']['coordinates'][1]])
-    
-    print(coordinates)
+
     return coordinates
 
