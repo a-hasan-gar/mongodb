@@ -14,17 +14,23 @@ def index(request):
     opsi = opsi_filter()
     if request.method == 'POST':
        # res = opsi_filter(request.POST)
-        #print(request.POST )
+        print("ini request.POST")
+        print(request.POST )
     
         radius = request.POST['radius']
         limit = request.POST['limit']
         filter_type = request.POST['filter_type']
-        cities_opt = request.POST.get('cities', False)
+        # cities_opt = request.POST.get('cities', False)
+        lonlan = request.POST.get('lon_lat', False)
+        lon = lonlan.split(", ")[0]
+        lat = lonlan.split(", ")[1]
+        #tp bingung gmn masukin value pinnya ke post
         print("ini cities_opt")
         print(cities_opt)
         # lon = request.POST['lon']
         # lat = request.POST.get('lat', False)
-        url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         print(url)
         req = requests.get(url)
         json_res = req.json()
