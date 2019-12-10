@@ -56,15 +56,46 @@
                 </div>
                 <br>
                  <!-- nanti disini form -->
-                <form method="POST" action='/'>  
-                    {% csrf_token %}  
+                
+                <form method="GET" action='/coordinate'>
+                    <div class="div-4 mx-auto text-center">
+                        {{ places }}
+                    </div>
+                    <br>
+                    <div class="col mx-auto text-center" style="margin:10px;">
+                        <button type="submit" class="btn" id="btn-find">Get Coordinate</button>
+                        
+                    </div>
+                </form>
+               
+              
+                
+                <form method="GET" action='/accidents/nearby?'>    
                     <div class="row mx-auto" style="margin:10px;">
                         <div class="div-4">
 
                         </div>
+
+                        {%if plc %}
                         <div class="div-4 mx-auto text-center">
-                               {{ opsi }}
+                            {{opsi}}
                         </div>
+                        {% else %}
+                        <div class="div-4 mx-auto text-center">
+                            <label> Lon </label>
+                            <input type="text" name="lon" value={{longs}}>
+                            <label> Lat </label>
+                            <input type="text" name="lat" value={{lat}}>
+                            <label> Radius </label>
+                            {{opsi.radius}}
+                            <label> Limit </label>
+                            {{opsi.limit}}
+                            <label> Filter </label>
+                            {{opsi.filter_type}}
+                     </div>
+                        {% endif %}
+                        
+
                         <div class="div-4">
 
                         </div>
@@ -78,6 +109,10 @@
                         <div class="col"></div>
                     </div>
                 </form>
+                
+                
+               
+                
     </div>
     <!-- slider_area_end -->
 
@@ -89,7 +124,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section_title mb-40 text-center">
-                        <h3>Accidents History</h3>
+                        <h3>Nearby Accidents</h3>
+                   
                     </div>
                 </div>
             </div>

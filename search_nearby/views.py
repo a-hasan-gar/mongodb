@@ -1,4 +1,5 @@
 import pprint
+import googlemaps
 from enum import IntEnum
 
 from django.http import JsonResponse
@@ -9,39 +10,64 @@ from .form import *
 from django.conf import settings
 from pymongo import MongoClient, GEO2D, GEOSPHERE
 
-def index(request):
-    json_res = {}
-    opsi = opsi_filter()
-    if request.method == 'POST':
-        # res = opsi_filter(request.POST)
-        # print(request.POST )
+# def index(request):
+#     json_res = {}
+#     opsi = opsi_filter()
+#     if request.method == 'POST':
+#         # res = opsi_filter(request.POST)
+#         # print(request.POST )
     
-        radius = request.POST['radius']
-        limit = request.POST['limit']
-        filter_type = request.POST['filter_type']
-        cities_opt = request.POST.get('cities', False)
-        print("ini cities_opt")
-        print(cities_opt)
-        # lon = request.POST['lon']
-        # lat = request.POST.get('lat', False)
-        url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
-        print(url)
-        url2 = 'http://167.71.204.99/accidents/nearbycoord?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
-        print(url2)
-        req = requests.get(url)
-        req2 = requests.get(url2)
-        json_res = req.json()
-        json_res2 = req2.json()
+#         radius = request.POST['radius']
+#         limit = request.POST['limit']
+#         filter_type = request.POST['filter_type']
+#         cities_opt = request.POST.get('cities', False)
+#         print("ini cities_opt")
+#         print(cities_opt)
+#         # lon = request.POST['lon']
+#         # lat = request.POST.get('lat', False)
+#         url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+#         print(url)
+#         url2 = 'http://167.71.204.99/accidents/nearbycoord?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+#         print(url2)
+#         req = requests.get(url)
+#         req2 = requests.get(url2)
+#         json_res = req.json()
+#         json_res2 = req2.json()
 
-        print(json_res)
-        print(json_res2)
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
+#         print(json_res)
+#         print(json_res2)
+#     return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
+gmaps = googlemaps.Client(key="AIzaSyCRmg-YeF4L81AF0gAenxovhsepQl2-K1U")
+
+
+def index(request):
+    plc=True
+    opsi = opsi_filter()
+    places = place()
+    
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'places':places,'plc':plc})
 
 
 # Connect with mongoDB
 collection_accident = settings.DB.accident
 
 EARTH_RADIUS = 6378100 # in meter
+
+def page_coordinate(request):
+    plc =False
+    places = place()
+    opsi = opsi_filter()
+    lat_long = get_location(str(request.GET['place']))
+    lat= lat_long['lat']
+    longs=lat_long['lng']
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'plc':plc,'lat':lat,'longs':longs,'places':places})
+
+
+def get_location(name):
+    geocode_result = gmaps.geocode(name)
+    lat_long= geocode_result[0]['geometry']['location']
+    return lat_long
+
 
 def nearby_accidents(request):
     # data = {}
@@ -133,3 +159,4 @@ def get_coord(accidents):
         coordinates.append([accident['Latitude'], accident['Longitude']])
     
     return coordinates
+
