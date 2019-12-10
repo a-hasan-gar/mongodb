@@ -35,9 +35,9 @@ class place(forms.Form):
     place=forms.CharField()
 
 class opsi_filter(forms.Form):
-    # lon=forms.CharField()
+    lat_lon=forms.CharField()
     # lat =forms.CharField()
-    cities = forms.CharField( widget=forms.Select(choices=cities_opt))
+    # cities = forms.CharField( widget=forms.Select(choices=cities_opt))
     radius = forms.CharField()
     limit = forms.CharField()
     filter_type= forms.CharField( widget=forms.Select(choices=Option_Type))

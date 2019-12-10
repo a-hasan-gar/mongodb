@@ -55,14 +55,14 @@ h1, h2, h3, h4, h5, h6, p, a {
   color: #001D38;
 } 
 .slider{
-  padding-top: 20vh;
+  padding-top: 5vh;
   background: url('../img/banner2.png')no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   background-color: #001D38;
-  height: 60vh;
+  height: 70vh;
   width: 100%;
   overflow-x: hidden;
 }
@@ -117,4 +117,9 @@ input#id_limit, input#id_radius{
   width: 10%;
   
 
+}
+#map {
+  height: 200px;
+  width: 40%;
+  border: 1px solid #000;
 }

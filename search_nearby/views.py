@@ -43,9 +43,31 @@ gmaps = googlemaps.Client(key="AIzaSyCRmg-YeF4L81AF0gAenxovhsepQl2-K1U")
 def index(request):
     plc=True
     opsi = opsi_filter()
-    places = place()
+    if request.method == 'POST':
+       # res = opsi_filter(request.POST)
+        print("ini request.POST")
+        print(request.POST )
     
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'places':places,'plc':plc})
+        radius = request.POST['radius']
+        limit = request.POST['limit']
+        filter_type = request.POST['filter_type']
+        # cities_opt = request.POST.get('cities', False)
+        lonlan = request.POST.get('lat_lon', False)
+        lon = lonlan.split(", ")[1]
+        lat = lonlan.split(", ")[0]
+        #tp bingung gmn masukin value pinnya ke post
+        print("ini cities_opt")
+        print(cities_opt)
+        # lon = request.POST['lon']
+        # lat = request.POST.get('lat', False)
+        #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        print(url)
+        req = requests.get(url)
+        json_res = req.json()
+        print(json_res)
+
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res})
 
 
 # Connect with mongoDB
