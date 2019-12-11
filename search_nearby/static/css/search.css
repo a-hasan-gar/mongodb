@@ -36,6 +36,7 @@
   -o-transition: 0.3s;
   transition: 0.3s;
 }
+
 a:focus {
     text-decoration: none;
 }
@@ -55,14 +56,14 @@ h1, h2, h3, h4, h5, h6, p, a {
   color: #001D38;
 } 
 .slider{
-  padding-top: 20vh;
+  padding-top: 5vh;
   background: url('../img/banner2.png')no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   background-color: #001D38;
-  height: 60vh;
+  height: 70vh;
   width: 100%;
   overflow-x: hidden;
 }
@@ -95,8 +96,7 @@ box-shadow: 5px 5px 30px 1px rgba(0,0,0,0.10), -5px -5px 30px 1px rgba(0,0,0,0.1
 .card-desc{
   padding-top: 20px;
 }
-select, input{
-  padding: 5px;
+div select, div input{
   border-radius: 5px;
   font-size: 14px;
 }
@@ -115,8 +115,44 @@ label{
   font-size: 16px;
 }
 
+#div-accor{
+  color:black;
+}
 input#id_limit, input#id_radius{
   width: 10%;
-  
 
+
+}
+#map {
+  height: 200px;
+  width: 40%;
+  border: 1px solid #000;
+}
+form.example input[type=text] {
+
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  font-size: 14px;
+  border: 1px solid grey;
+  width: 40%;
+  padding: 5px 30px;
+  border-color: gold;
+}
+#button-search {
+  float: left;
+  width: 5%; 
+  border-radius: 0px 5px 5px 0px;
+  font-size: 14px;
+  border-left: none;
+  cursor: pointer;
+  background-color: gold;
+  color: white;
+  border-color: gold;
+  padding: 5px 30px;
+  
+  
+}
+
+form.example #button-search:hover {
+  background: orange;
 }

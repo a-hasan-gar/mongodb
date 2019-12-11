@@ -4,21 +4,45 @@ from enum import IntEnum
 
 from django.http import JsonResponse
 from django.shortcuts import render
-
+import requests
 from .form import *
 
 from django.conf import settings
 from pymongo import MongoClient, GEO2D, GEOSPHERE
 
-gmaps = googlemaps.Client(key="AIzaSyCRmg-YeF4L81AF0gAenxovhsepQl2-K1U")
+gmaps = googlemaps.Client(key="AIzaSyCRmg-YeF4L81AF0gAenxovhsepQl2-K1U") 
 
 
 def index(request):
-    plc=True
+    json_res = {}
+    longs= -0.1278
+    lat = 51.5074
     opsi = opsi_filter()
-    places = place()
+    if request.method == 'POST':
+       # res = opsi_filter(request.POST)
+        print("ini request.POST")
+        print(request.POST )
     
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'places':places,'plc':plc})
+        radius = request.POST['radius']
+        limit = request.POST['limit']
+        filter_type = request.POST['filter_type']
+        # cities_opt = request.POST.get('cities', False)
+        lonlan = request.POST.get('lat_lon', False)
+        lon = lonlan.split(", ")[1]
+        lat = lonlan.split(", ")[0]
+        #tp bingung gmn masukin value pinnya ke post
+        print("ini cities_opt")
+        print(cities_opt)
+        # lon = request.POST['lon']
+        # lat = request.POST.get('lat', False)
+        #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
+        print(url)
+        req = requests.get(url)
+        json_res = req.json()
+        print(json_res)
+
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res, 'lat':lat,'longs':longs})
 
 
 # Connect with mongoDB
@@ -27,14 +51,22 @@ collection_accident = settings.DB.accident
 EARTH_RADIUS = 6378100 # in meter
 
 def page_coordinate(request):
-    plc =False
+    
     places = place()
     opsi = opsi_filter()
     lat_long = get_location(str(request.GET['place']))
     lat= lat_long['lat']
     longs=lat_long['lng']
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'plc':plc,'lat':lat,'longs':longs,'places':places})
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'lat':lat,'longs':longs,'places':places})
 
+def map_coordinate(request):
+    
+    places = place()
+    opsi = opsi_filter()
+    lat_long = get_location(str(request.GET['lat_lon']))
+    lat= lat_long['lat']
+    longs=lat_long['lng']
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'lat':lat,'longs':longs,'places':places})
 
 def get_location(name):
     geocode_result = gmaps.geocode(name)
