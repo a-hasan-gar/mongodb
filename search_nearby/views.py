@@ -17,7 +17,7 @@ def index(request):
     json_res = {}
     longs= -0.1278
     lat = 51.5074
-    opsi = opsi_filter()
+    opsi = opsi_filter(initial={'lat_lon':"51.5074,-0.1278"})
     if request.method == 'POST':
        # res = opsi_filter(request.POST)
         print("ini request.POST")
@@ -28,8 +28,8 @@ def index(request):
         filter_type = request.POST['filter_type']
         # cities_opt = request.POST.get('cities', False)
         lonlan = request.POST.get('lat_lon', False)
-        lon = lonlan.split(", ")[1]
-        lat = lonlan.split(", ")[0]
+        lon = int(lonlan.split(", ")[1])
+        lat = int(lonlan.split(", ")[0])
         #tp bingung gmn masukin value pinnya ke post
         print("ini cities_opt")
         print(cities_opt)
@@ -53,10 +53,12 @@ EARTH_RADIUS = 6378100 # in meter
 def page_coordinate(request):
     
     places = place()
-    opsi = opsi_filter()
     lat_long = get_location(str(request.GET['place']))
     lat= lat_long['lat']
     longs=lat_long['lng']
+    str_lat = str(lat)
+    str_long = str(longs)
+    opsi = opsi_filter(initial={'lat_lon':str_lat+','+str_long})
     return render(request, 'search_nearby/home.html', {'opsi' : opsi,'lat':lat,'longs':longs,'places':places})
 
 def map_coordinate(request):
