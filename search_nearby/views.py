@@ -38,9 +38,9 @@ def index(request):
         #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         print(url)
-        # req = requests.get(url)
+        req = requests.get(url)
         # print(req)
-        json_res = {'Daylight': 267, 'Moonlight': 403, 'Lowlight': 111} #req.json()
+        json_res = req.json()
         print(json_res)
         coordinates = nearby_accidents_coord(float(lon), float(lat), int(radius), int(limit))
         
