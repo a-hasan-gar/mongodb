@@ -42,7 +42,10 @@ def index(request):
         # print(req)
         json_res = {'Daylight': 267, 'Moonlight': 403, 'Lowlight': 111} #req.json()
         print(json_res)
-        coordinates = nearby_accidents_coord(float(lon), float(lat), int(radius), int(limit))
+        if int(radius) >= 100000:
+            coordinates = nearby_accidents_coord(float(lon), float(lat), int(radius), 100000)
+        else:
+            coordinates = nearby_accidents_coord(float(lon), float(lat), int(radius), int(limit))
         
         json_list = json.dumps(coordinates)
         json_res_dump = json.dumps(json_res)
