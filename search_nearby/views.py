@@ -116,7 +116,7 @@ def get_nearby_accidents(lon, lat, radius=500, lim=0):
 def get_coord(accidents):
     coordinates = []
     for accident in accidents:
-        
+        print(accident)
         coordinates.append([accident['Location']['coordinates'][0], accident['Location']['coordinates'][1]])
 
     return coordinates
