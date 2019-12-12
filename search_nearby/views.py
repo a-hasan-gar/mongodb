@@ -28,8 +28,9 @@ def index(request):
         filter_type = request.POST['filter_type']
         # cities_opt = request.POST.get('cities', False)
         lonlan = request.POST.get('lat_lon', False)
-        lon = int(lonlan.split(", ")[1])
-        lat = int(lonlan.split(", ")[0])
+        print(lonlan)
+        lon = lonlan.split(",")[1]
+        lat = lonlan.split(",")[0]
         #tp bingung gmn masukin value pinnya ke post
         print("ini cities_opt")
         print(cities_opt)
@@ -38,8 +39,9 @@ def index(request):
         #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         print(url)
-        req = requests.get(url)
-        json_res = req.json()
+        # req = requests.get(url)
+        # print(req)
+        json_res = {'Daylight': 267, 'Moonlight': 403, 'Lowlight': 111} #req.json()
         print(json_res)
 
     return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res, 'lat':lat,'longs':longs})
@@ -78,6 +80,7 @@ def get_location(name):
 
 def nearby_accidents(request):
     if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
+        print("non get")
         return JsonResponse({})
 
     try:
@@ -88,6 +91,7 @@ def nearby_accidents(request):
         filter_type = int(request.GET.get('filter_type', FilterType.LIGHT_CONDITIONS))
 
     except:
+        print("except")
         return JsonResponse({})
 
 

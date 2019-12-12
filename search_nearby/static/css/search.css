@@ -63,7 +63,7 @@ h1, h2, h3, h4, h5, h6, p, a {
   -o-background-size: cover;
   background-size: cover;
   background-color: #001D38;
-  height: 70vh;
+  height: 80vh;
   width: 100%;
   overflow-x: hidden;
 }
@@ -124,7 +124,7 @@ input#id_limit, input#id_radius{
 
 }
 #map {
-  height: 200px;
+  height: 190px;
   width: 40%;
   border: 1px solid #000;
 }

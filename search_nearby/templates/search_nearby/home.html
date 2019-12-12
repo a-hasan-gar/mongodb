@@ -102,7 +102,7 @@
                  <!-- nanti disini form -->
                 <form method="GET" action='#'>  
                     {% csrf_token %}  
-                    <div class="row mx-auto" style="margin:10px;">
+                    <div class="row mx-auto" style="">
                         <div class="div-4">
 
                         </div>
@@ -116,13 +116,13 @@
                     
                     <div class="container " style="color:white;">
                         <center>
-                        <h2><p style="color:white;">This is your Coordinate</p> </h2>
+                        <label style="color:white;">This is your Coordinate (Lat, Lon)</label> 
                         <h4>  <p id="that_lat_lon" style="color:white;">{{lat}},{{longs}}</p></h4> 
                         <h4>  <p id="this_lat_lon" style="color:white;"></p></h4> 
                     </div>
                     <div class="row justify-content-center">
                         <div class="col"></div>
-                        <div class="col mx-auto text-center" style="margin:10px;">
+                        <div class="col mx-auto text-center" style="margin:7px;">
                             <button type="button" class="btn" id="btn-find"  data-toggle="collapse"data-target="#collapseExample">Use Coordinate</button>
                             
                         </div>
@@ -246,8 +246,8 @@
             google.maps.event.addListener(marker, 'dragend', function(a) {
                 console.log(a);
                 document.getElementById('that_lat_lon').innerText = ""; //Place the value in input box
-                document.getElementById('this_lat_lon').innerText = a.latLng.lat()+ ',' + a.latLng.lng(); //Place the value in input box
-                document.getElementById('id_lat_lon').value = a.latLng.lat()+ ',' + a.latLng.lng(); //Place the value in input box
+                document.getElementById('this_lat_lon').innerText = a.latLng.lat()+ ', ' + a.latLng.lng(); //Place the value in input box
+                document.getElementById('id_lat_lon').value = a.latLng.lat()+ ', ' + a.latLng.lng(); //Place the value in input box
             });
 
         };
