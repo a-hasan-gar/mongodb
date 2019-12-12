@@ -24,8 +24,8 @@ def index(request):
         filter_type = request.POST['filter_type']
         # cities_opt = request.POST.get('cities', False)
         lonlan = request.POST.get('lat_lon', False)
-        lon = lonlan.split(", ")[1]
-        lat = lonlan.split(", ")[0]
+        lon = lonlan.split(",")[1]
+        lat = lonlan.split(",")[0]
         #tp bingung gmn masukin value pinnya ke post
         
         # lon = request.POST['lon']
