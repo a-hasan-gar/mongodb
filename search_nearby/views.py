@@ -5,17 +5,22 @@ from django.http import JsonResponse
 from django.shortcuts import render
 import requests
 from .form import *
-
+import googlemaps
 from django.conf import settings
 from pymongo import MongoClient, GEO2D, GEOSPHERE
 import json
 
+gmaps = googlemaps.Client(key="AIzaSyCRmg-YeF4L81AF0gAenxovhsepQl2-K1U") 
+
 def index(request):
-    json_res = {}
-    opsi = opsi_filter()
     coordinates = []
     json_list = json.dumps([])
     json_res_dump = json.dumps({})
+    json_res = {}
+    longs= -0.1278
+    lat = 51.5074
+    opsi = opsi_filter(initial={'lat_lon':"51.5074,-0.1278"})
+
     if request.method == 'POST':
        # res = opsi_filter(request.POST)
     
@@ -32,14 +37,17 @@ def index(request):
         # lat = request.POST.get('lat', False)
         #url = 'http://167.71.204.99/accidents/nearby?'+cities_opt+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
         url = 'http://167.71.204.99/accidents/nearby?'+"lon="+lon+"&lat="+lat+'&radius='+radius+"&limit="+limit+"&filter_type="+filter_type
-        
-        req = requests.get(url)
-        json_res = req.json()
+        print(url)
+        # req = requests.get(url)
+        # print(req)
+        json_res = {'Daylight': 267, 'Moonlight': 403, 'Lowlight': 111} #req.json()
+        print(json_res)
         coordinates = nearby_accidents_coord(float(lon), float(lat), int(radius), int(limit))
         
         json_list = json.dumps(coordinates)
         json_res_dump = json.dumps(json_res)
-    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res, 'coordinates' : json_list, 'json_res_dump' : json_res_dump})
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi, 'json_res' : json_res, 'coordinates' : json_list, 'json_res_dump' : json_res_dump, 'lat':lat,'longs':longs})
+
 
 
 # Connect with mongoDB
@@ -48,8 +56,36 @@ collection_accident = settings.DB.accident
 EARTH_RADIUS = 6378100 # in meter
 MAX_BATCH_SIZE = 100000
 
+
+def page_coordinate(request):
+    
+    places = place()
+    lat_long = get_location(str(request.GET['place']))
+    lat= lat_long['lat']
+    longs=lat_long['lng']
+    str_lat = str(lat)
+    str_long = str(longs)
+    opsi = opsi_filter(initial={'lat_lon':str_lat+','+str_long})
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'lat':lat,'longs':longs,'places':places})
+
+def map_coordinate(request):
+    
+    places = place()
+    opsi = opsi_filter()
+    lat_long = get_location(str(request.GET['lat_lon']))
+    lat= lat_long['lat']
+    longs=lat_long['lng']
+    return render(request, 'search_nearby/home.html', {'opsi' : opsi,'lat':lat,'longs':longs,'places':places})
+
+def get_location(name):
+    geocode_result = gmaps.geocode(name)
+    lat_long= geocode_result[0]['geometry']['location']
+    return lat_long
+
+
 def nearby_accidents(request):
     if request.method != 'GET' or 'lon' not in request.GET or 'lat' not in request.GET:
+        print("non get")
         return JsonResponse({})
 
     try:
@@ -60,6 +96,7 @@ def nearby_accidents(request):
         filter_type = int(request.GET.get('filter_type', FilterType.LIGHT_CONDITIONS))
 
     except:
+        print("except")
         return JsonResponse({})
 
 

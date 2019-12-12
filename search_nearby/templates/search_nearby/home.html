@@ -10,7 +10,7 @@
     <title>Nearby</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
     <!-- CSS here -->
     
@@ -22,6 +22,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+    <script src="http://maps.google.com/maps/api/js?sensor=false" 
+    type="text/javascript"></script>
 </head>
 
 <body>
@@ -62,13 +64,32 @@
 
                     </div>
                     <div class="col-6  mx-auto text-center">
-                        <label class="align-middle">Select Your Location: </label>
+                            <form class="example" method="GET" action='/coordinate' style="margin:auto;max-width:460px">
+                                <label class="align-middle" style="float: left;">Search Your Location: </label>
+                                <input class="align-middle" type="text" placeholder="Search.." name="place">
+                                <button type="submit"class="btn" id="button-search"><i class="fa fa-search"></i></button>
+                                
+                              </form>
+                        
                     </div>
                     <div class="col">
 
                     </div>
                 </div>
-               
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-6 text-center">
+                        <label>or</label>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-6 text-center">
+                        <label>Select From Map Below</label>
+                    </div>
+                    <div class="col"></div>
+                </div>
                 <div class="row">
                     <div class="col">
                         
@@ -77,34 +98,73 @@
                     
                 </div>
                  <!-- nanti disini form -->
-                <form method="POST" action='/'>  
+
+                <form method="GET" action='#'>  
                     {% csrf_token %}  
-                    <div class="row mx-auto" style="margin:10px;">
+                    <div class="row mx-auto" style="">
                         <div class="div-4">
 
                         </div>
-                        <div class="div-4 mx-auto text-center">
-                               {{ opsi }}
-                        </div>
+
                         <div class="div-4">
 
                         </div>
                     </div>
-                    <br>
+                    
+                    <div class="container " style="color:white;">
+                        <center>
+                        <label style="color:white;">This is your Coordinate (Lat, Lon)</label> 
+                        <h4>  <p id="that_lat_lon" style="color:white;">{{lat}},{{longs}}</p></h4> 
+                        <h4>  <p id="this_lat_lon" style="color:white;"></p></h4> 
+                    </div>
                     <div class="row justify-content-center">
                         <div class="col"></div>
-                        <div class="col mx-auto text-center" style="margin:10px;">
-                            <button type="submit" class="btn" id="btn-find">Find</button>
+                        <div class="col mx-auto text-center" style="margin:7px;">
+                            <button type="button" class="btn" id="btn-find"  data-toggle="collapse"data-target="#collapseExample">Use Coordinate</button>
                             
                         </div>
                         <div class="col"></div>
                     </div>
                 </form>
+
     </div>
     <!-- slider_area_end -->
+    <br>
 
+    <div class="container">
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                    <center>
+                        <h2>Input Your Filter</h2>
+                    </center>
+                    <form method="POST" action='/'>  
+                        {% csrf_token %}  
+                        <div class="row mx-auto" style="margin:10px;">
+                            <div class="div-4">
+    
+                            </div>
+                            <div class="div-4 mx-auto text-center" style="color: black;" >
+                                 {{ opsi }} 
+                            </div>
+                            <div class="div-4">
+    
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row justify-content-center">
+                            <div class="col"></div>
+                            <div class="col mx-auto text-center" style="margin:10px;">
+                                <button type="submit" class="btn" id="btn-find">Find</button>
+                                
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                    </form>
+            </div>
+          </div>
+        </center>
 
-
+    </div>
     <!-- popular_Location  -->
     <div class="container-fluid popular_location">
         <div class="container">
@@ -115,16 +175,23 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
-                <div class="align-middle  mx-auto text-center" id="mapresult" style="width: 500px; height: 400px;"></div>
+                <div class="container" style="width: 90%; height: 200px;">
+                    <canvas id="accident-chart" height="20vh" width="90vw"></canvas>
+                </div>
             </div>
             
             <br>
-            <div class="container" style="width: 600px; height: 400px;">
-                <canvas id="accident-chart"></canvas>
+            <br>
+            <br>
+            <br>
+            <div class="row">
+                <div class="align-middle  mx-auto text-center" id="mapresult" style="width: 90%; height: 300px;"></div>
             </div>
-            {% for key, value in json_res.items  %}
+            
+            
+            
+            <!-- {% for key, value in json_res.items  %}
             
                 <div class="row">
                     <div class="card-loc">
@@ -134,7 +201,7 @@
                         <h4 class="card-desc">ini adalah tempat abcd</h4>
                     </div>
                 </div>				
-            {% endfor %}
+            {% endfor %} -->
             
             
     </div>
@@ -175,7 +242,9 @@
     <script>
         //the maps api is setup above
         window.onload = function() {
-            var latlng = new google.maps.LatLng(51.5074, -0.1278); //Set the default location of map
+
+            var latlng = new google.maps.LatLng("{{lat}}","{{longs}}"); //Set the default location of map
+
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: latlng,
                 zoom: 11, //The zoom value for map
@@ -188,8 +257,12 @@
                 draggable: true //this makes it drag and drop
             });
             google.maps.event.addListener(marker, 'dragend', function(a) {
-                document.getElementById('id_lat_lon').value = a.latLng.lat().toFixed(4) + ', ' + a.latLng.lng().toFixed(4); //Place the value in input box
-            
+
+                console.log(a);
+                document.getElementById('that_lat_lon').innerText = ""; //Place the value in input box
+                document.getElementById('this_lat_lon').innerText = a.latLng.lat()+ ', ' + a.latLng.lng(); //Place the value in input box
+                document.getElementById('id_lat_lon').value = a.latLng.lat().toFixed(4)+ ', ' + a.latLng.lng().toFixed(4); //Place the value in input box
+
             });
         };
     </script>
@@ -226,6 +299,7 @@
     
     <script>
         var ctx = document.getElementById('accident-chart').getContext('2d');
+        ctx.height = 300;
         var labels = [];
         var frequencies = [];
         var frequencies_by_filter = JSON.parse('{{ json_res_dump|safe }}');

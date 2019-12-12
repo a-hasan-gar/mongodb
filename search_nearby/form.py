@@ -41,3 +41,5 @@ class opsi_filter(forms.Form):
     radius = forms.CharField(label='Radius (m)')
     limit = forms.CharField()
     filter_type= forms.CharField( widget=forms.Select(choices=Option_Type))
+
+    
