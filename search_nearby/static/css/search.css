@@ -36,6 +36,7 @@
   -o-transition: 0.3s;
   transition: 0.3s;
 }
+
 a:focus {
     text-decoration: none;
 }
@@ -62,7 +63,7 @@ h1, h2, h3, h4, h5, h6, p, a {
   -o-background-size: cover;
   background-size: cover;
   background-color: #001D38;
-  height: 70vh;
+  height: 80vh;
   width: 100%;
   overflow-x: hidden;
 }
@@ -99,8 +100,14 @@ div select, div input{
   border-radius: 5px;
   font-size: 14px;
 }
-label{
+label#white{
   color: #f1f1f1;
+  font-weight: 500;
+  margin: 5px;
+  font-size: 16px;
+}
+label{
+  color: #1F1F1F;
   font-weight: 500;
   margin: 5px;
   font-size: 16px;
@@ -113,13 +120,48 @@ label{
   
   font-size: 16px;
 }
+
+#div-accor{
+  color:black;
+}
 input#id_limit, input#id_radius{
   width: 10%;
-  
 
 }
 #map {
-  height: 200px;
+  height: 190px;
   width: 40%;
   border: 1px solid #000;
+}
+form.example input[type=text] {
+
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  font-size: 14px;
+  border: 1px solid grey;
+  width: 40%;
+  padding: 5px 30px;
+  border-color: gold;
+}
+#button-search {
+  float: left;
+  width: 5%; 
+  border-radius: 0px 5px 5px 0px;
+  font-size: 14px;
+  border-left: none;
+  cursor: pointer;
+  background-color: gold;
+  color: white;
+  border-color: gold;
+  padding: 5px 30px;
+  
+  
+}
+
+form.example #button-search:hover {
+  background: orange;
+}
+#id_lat_lon, #id_radius, #id_limit, #id_filter_type{
+  color: #1F1F1F;
+  border-color: gold;
 }

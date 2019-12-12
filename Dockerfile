@@ -7,4 +7,4 @@ WORKDIR /backend_service
 COPY . .
 RUN pip install -r requirements.txt
 
-CMD python manage.py migrate && gunicorn nearby_mongodb.wsgi -b 0.0.0.0:8000
+CMD gunicorn nearby_mongodb.wsgi -b 0.0.0.0:8000
